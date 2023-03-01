@@ -68,7 +68,7 @@ if option == "countries":
         data = json.loads(response)
 
     st.title(data[0]["name"]["official"])
-    st.write(country_data.get_country_data(country))
+    # st.write(country_data.get_country_data(country))
     country_df = pd.DataFrame(
         country_data.get_country_data(country), index=[0])
 
