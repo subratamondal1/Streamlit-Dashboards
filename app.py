@@ -61,7 +61,7 @@ if option == "countries":
 
     with st.sidebar:
         country = st.text_input("**`by Country`**", "india")
-        capital = st.text_input("**`by Country`**", "delhi")
+        # capital = st.text_input("**`by Country`**", "delhi")
 
         response = requests.get(
             f"https://restcountries.com/v3.1/name/{country}").text
