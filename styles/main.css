@@ -17,6 +17,18 @@ div.css-12w0qpk.e1tzin5v2 {
     border-radius: 10px;
 }
 
+/* country capital */
+div.css-keje6w.e1tzin5v2 {
+    display: flex;
+    justify-content: space-between;
+    background-color: #1c1b1a;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 10px;
+}
+
 /* countries dashboards */
 div.css-1r6slb0.e1tzin5v2 {
     display: flex;

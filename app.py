@@ -5,6 +5,7 @@ import json
 import time
 import numpy as np
 import pandas as pd
+import plotly.express as px
 
 # ---Page Config--- #
 st.set_page_config(page_title="#Dashboards", layout="wide",
@@ -19,6 +20,15 @@ with open("styles/main.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 if option == "countries":
+    # import data
+    countries_df = pd.read_csv("data/countries.csv")
+    # top 10 countries by population
+    top_10_countries_population = countries_df[["common_name", "population"]].sort_values(
+        by="population", ascending=False).head(10)
+    # top 10 countries by area
+    top_10_countries_area = countries_df[["common_name", "area"]].sort_values(
+        by="area", ascending=False).head(10)
+
     class CountryData:
         def __init__(self):
             self.__by_country_url = "https://restcountries.com/v3.1/name/"
@@ -67,25 +77,18 @@ if option == "countries":
             f"https://restcountries.com/v3.1/name/{country}").text
         data = json.loads(response)
 
-    st.title(data[0]["name"]["official"])
     # st.write(country_data.get_country_data(country))
     country_df = pd.DataFrame(
         country_data.get_country_data(country), index=[0])
 
-    # container 1
-    with st.container():
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.image(country_df["flagSvg"].values[0])
-        with col2:
-            st.metric(
-                "Country", country_df["commonName"].values[0], country_df["officalName"].values[0])
-        with col3:
-            st.metric("Capital", country_df["capital"].values[0])
+    st.sidebar.image(country_df["flagSvg"].values[0])
+    st.sidebar.write(
+        f'## {data[0]["name"]["official"]} ‣ {country_df["capital"].values[0]}')
 
     # container 2
     with st.container():
         col1, col2, col3 = st.columns(3)
+
         with col1:
             st.metric("Currency", f"{country_df['currency'].values[0]} ‣ {country_df['currencySymbol'].values[0]}",
                       country_df["currenyFullName"].values[0])
@@ -96,6 +99,26 @@ if option == "countries":
             st.metric(
                 "Area", f"{round((country_df['area'].values[0])/1000)}K", "Square Kilometers")
 
+    # container 3
+    with st.container():
+
+        fig1 = px.pie(top_10_countries_population, values='population',
+                      names='common_name', title='Top 10 populated country')
+
+        fig2 = px.bar(top_10_countries_population, x="common_name",
+                      y="population", text="population")
+        fig2.update_layout(title='Top 10 countries by Population',
+                           xaxis_title='Country', yaxis_title='Population')
+
+        tab1, tab2 = st.tabs(
+            ["Pie Chart", "Bar Chart"])
+        with tab1:
+            # Use the Streamlit theme.
+            # This is the default. So you can also omit the theme argument.
+            st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
+        with tab2:
+            # Use the native Plotly theme.
+            st.plotly_chart(fig2, theme=None, use_container_width=True)
 
 # ---Polygon--- #
 if option == "polygon stock":
