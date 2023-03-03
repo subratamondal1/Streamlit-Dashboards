@@ -22,9 +22,11 @@ with open("styles/main.css") as f:
 if option == "countries":
     # import data
     countries_df = pd.read_csv("data/countries.csv")
+
     # top 10 countries by population
     top_10_countries_population = countries_df[["common_name", "population"]].sort_values(
         by="population", ascending=False).head(10)
+
     # top 10 countries by area
     top_10_countries_area = countries_df[["common_name", "area"]].sort_values(
         by="area", ascending=False).head(10)
@@ -122,7 +124,7 @@ if option == "countries":
 
 # ---Polygon--- #
 if option == "polygon stock":
-    ticker = st.sidebar.text_input("**`Symbol`**", value="AAPL")
+    ticker = st.sidebar.text_input("**`Ticker`**", value="AAPL")
 
     class ApiCalls:
         """
@@ -259,9 +261,3 @@ if option == "polygon stock":
                     st.metric("IPO", company_details.get_list_date())
 
                 st.write(company_details.get_description())
-
-
-if option == "charts":
-    st.title(option)
-if option == "patterns":
-    st.title(option)
